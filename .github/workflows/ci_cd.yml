@@ -136,7 +136,7 @@ jobs:
       - name: Deploy to Server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            cd /home/ubuntu/task_tracker
+            cd /home/test1/task_tracker
             docker-compose down
             docker-compose pull
             docker-compose up -d
