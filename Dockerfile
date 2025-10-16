@@ -21,6 +21,10 @@ COPY . .
 # Создание директорий для статики и медиа
 RUN mkdir -p /app/staticfiles /app/media
 
+# Установить временный SECRET_KEY для collectstatic во время сборки
+ENV SECRET_KEY="временный-ключ-только-для-сборки-12345"
+ENV DEBUG="False"
+
 # Сборка статических файлов (выполняется один раз при сборке образа)
 RUN python manage.py collectstatic --noinput
 
