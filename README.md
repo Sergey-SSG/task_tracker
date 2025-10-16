@@ -20,10 +20,64 @@
 - Docker & Docker Compose
 - Swagger/ReDoc для документации
 
-## 📦 Установка и запуск
+## 🚀 Деплой
 
-### 1. Клонирование репозитория
+Проект развернут на удаленном сервере и доступен по адресу:
 
-```bash
-git clone <repository-url>
-cd employee_task_tracker
+**URL:** http://51.250.20.104/
+
+## Запуск проекта
+
+### Предварительные требования
+- Docker
+- Docker Compose
+
+### Шаги для запуска
+
+1. **Клонируйте репозиторий**
+   ```bash
+    # Клонирование репозитория
+    git clone <repository-url>
+    cd task_tracker
+
+    # Копирование env файла
+    cp .env_sample .env
+    
+    # Запуск всех сервисов
+    docker-compose up --build
+    
+    # Применение миграций (в другом терминале)
+    docker-compose exec web python manage.py makemigrations
+    
+    # Создание суперпользователя
+    docker-compose exec web python manage.py createsuperuser
+    
+    # Запуск тестов
+    docker-compose exec web python manage.py test
+       
+## Настройка сервера и деплой
+
+1.  **Сервер:**
+    *   Создайте VPS с Ubuntu 22.04.
+    *   Создайте пользователя `django` с sudo-правами.
+    *   Настройте аутентификацию по SSH-ключу и отключите вход по паролю.
+    *   Откройте порты 22 (SSH), 80 (HTTP) и 443 (HTTPS) с помощью UFW.
+    *   Установите Python, pip, Nginx, PostgreSQL.
+
+2.  **База данных:**
+    *   Создайте БД и пользователя в PostgreSQL.
+
+3.  **Приложение:**
+    *   Клонируйте репозиторий в `/home/test1`.
+    *   Создайте виртуальное окружение и установите зависимости.
+    *   Создайте файл `.env` по образцу `.env_sample` и заполните реальными значениями.
+    *   Настройте виртуальный хост в Nginx.
+
+4.  **GitHub Actions:**
+    *   В Secrets репозитория добавьте `SERVER_IP`, `SERVER_USER`, `SSH_PRIVATE_KEY`.
+    *   При пуше в ветку `feature_first` workflow автоматически запустит тесты и, в случае успеха, выполнит деплой на сервер.
+
+5.  **Приложение доступно по адресам:**
+    *   Основное приложение: http://localhost:8000
+    *   Админ-панель: http://localhost:8000/admin
+    *   API документация: http://localhost:8000/swagger
