@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.db.models import Count, Q
+
 from .models import Employee, Task
 
 
@@ -7,7 +8,13 @@ from .models import Employee, Task
 class EmployeeAdmin(admin.ModelAdmin):
     """Админ-панель для сотрудников."""
 
-    list_display = ["full_name", "position", "email", "hire_date", "active_tasks_count_display"]
+    list_display = [
+        "full_name",
+        "position",
+        "email",
+        "hire_date",
+        "active_tasks_count_display",
+    ]
     list_filter = ["position", "hire_date"]
     search_fields = ["full_name", "email"]
     readonly_fields = ["created_at", "updated_at"]
@@ -19,18 +26,30 @@ class EmployeeAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         """Добавляем аннотацию для подсчёта активных задач."""
-        return super().get_queryset(request).annotate(
-            active_tasks_count_annotated=Count(
-                'tasks',
-                filter=Q(tasks__status__in=[Task.Status.IN_PROGRESS, Task.Status.IN_REVIEW])
+        return (
+            super()
+            .get_queryset(request)
+            .annotate(
+                active_tasks_count_annotated=Count(
+                    "tasks",
+                    filter=Q(
+                        tasks__status__in=[
+                            Task.Status.IN_PROGRESS,
+                            Task.Status.IN_REVIEW,
+                        ]
+                    ),
+                )
             )
         )
 
     def active_tasks_count_display(self, obj):
         """Отображаем количество активных задач."""
         return obj.active_tasks_count_annotated
-    active_tasks_count_display.short_description = 'Активные задачи'
-    active_tasks_count_display.admin_order_field = 'active_tasks_count_annotated'  # позволяет сортировать по этому полю
+
+    active_tasks_count_display.short_description = "Активные задачи"
+    active_tasks_count_display.admin_order_field = (
+        "active_tasks_count_annotated"  # позволяет сортировать по этому полю
+    )
 
 
 @admin.register(Task)

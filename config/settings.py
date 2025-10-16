@@ -180,6 +180,9 @@ SWAGGER_SETTINGS = {
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+# Email settings
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
 # Redis settings
 REDIS_URL = os.getenv("REDIS_URL")
 

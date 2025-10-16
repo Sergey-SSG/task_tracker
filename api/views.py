@@ -11,12 +11,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import Employee, Task
-from .serializers import (
-    EmployeeSerializer,
-    EmployeeTasksSerializer,
-    ImportantTaskSerializer,
-    TaskSerializer,
-)
+from .serializers import (EmployeeSerializer, EmployeeTasksSerializer,
+                          ImportantTaskSerializer, TaskSerializer)
 
 
 class EmployeeViewSet(viewsets.ModelViewSet):
@@ -49,7 +45,7 @@ class EmployeeViewSet(viewsets.ModelViewSet):
                     tasks__status__in=[Task.Status.IN_PROGRESS, Task.Status.IN_REVIEW]
                 ),
             )
-        ).order_by('full_name')
+        ).order_by("full_name")
 
     def destroy(self, request, *args, **kwargs):
         """
